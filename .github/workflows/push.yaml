@@ -1,6 +1,6 @@
 # Test
 # What is going on?
-name: issue-greeter
+name: issue-greeter2
 on: 
   issues:
     types: [opened]
