@@ -1,5 +1,5 @@
 name: issue-greeter
-on:
+on: 
   issues:
     types: [opened]
 jobs:
