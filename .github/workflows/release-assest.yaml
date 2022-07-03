@@ -1,3 +1,4 @@
+# Wrong format?
 name: release
 on:
   release:
