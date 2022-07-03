@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: download-source
 #       run: curl -sL -S "${{ github.event.release.tarball_url }}" > "$ARCHIVE_NAME".tar.gz
-        run: curl -L -S https://github.com/MobyDickDick/HelloWorld/tarball/master > "$ARCHIVE_NAME".tar.gz
+        run: curl -L -S https://github.com/MobyDickDick/HelloWorld/tarball/master 
       - name: unzip-source
         run: mkdir "$ARCHIVE_NAME" && tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: clean-source
