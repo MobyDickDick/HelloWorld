@@ -9,7 +9,7 @@ jobs:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
       - name: download-source
-        run: curl -sL "${{ github.event.release.zipball_url }}" >"$ARCHIVE_NAME".zip
+        run: curl "${{ github.event.release.zipball_url }}" >"$ARCHIVE_NAME".zip
       - name: print-command
         run: echo tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: create-directory
