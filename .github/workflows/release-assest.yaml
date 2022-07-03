@@ -1,36 +1,24 @@
-# Wrong format? Really?
-name: release
+name: release-asset-creator
 on:
   release:
     types: [published]
 jobs:
-  main:
+  my-job:
     runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
-      TARBALL_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.tar.gz
     steps:
-      - name: get-name
-        run: echo "${{ github.event.release.tarball_url }}"
       - name: download-source
-        run: curl "${{ github.event.release.tarball_url }}" > "$TARBALL_NAME"
-      - name: echo-response
-        run: echo "$TARBALL_NAME"
+        run: curl -sL "${{ github.event.release.tarball_url }}" >"$ARCHIVE_NAME".tar.gz
       - name: unzip-source
-        run: mkdir "$ARCHIVE_NAME" && tar -xzf "$TARBALL_NAME" -C "$ARCHIVE_NAME" --strip-components 1
-      - name: check-version
-        run: '[[ $("$ARCHIVE_NAME"/k1s -v) = "${{ github.event.release.tag_name }}" ]]'
+        run: mkdir "$ARCHIVE_NAME" && tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: clean-source
-        run: rm -rf "$ARCHIVE_NAME"/{.github,assets}
+        run: rm -rf "$ARCHIVE_NAME"/.github
       - name: create-archive
         run: tar -czf "$ARCHIVE_NAME".tar.gz "$ARCHIVE_NAME"
       - name: create-checksum
-        id: create-checksum
-        run: |
-          sha256sum "$ARCHIVE_NAME".tar.gz >checksum.txt
-          echo "::set-output name=checksum::$(cut -d ' ' -f 1 checksum.txt)"
+        run: sha256sum "$ARCHIVE_NAME".tar.gz >checksum.txt
       - name: upload-archive
-        id: upload-archive
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
@@ -40,7 +28,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: upload-checksum
-        id: upload-checksum
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
@@ -49,30 +36,3 @@ jobs:
           asset_content_type: text/plain
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: trigger-formula-upgrade
-        run: |
-          curl -s -X POST \
-            https://api.github.com/repos/weibeld/homebrew-core/dispatches \
-            -H "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            -d '
-              {
-                "event_type": "upgrade-formula",
-                "client_payload": {
-                  "formula": "k1s",
-                  "url": "${{ steps.upload-archive.outputs.browser_download_url }}",
-                  "sha256": "${{ steps.create-checksum.outputs.checksum }}"
-                }
-              }
-            '
-      - if: failure() 
-        name: abort
-        run: |
-          curl -s -X DELETE \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.event.repository.full_name }}/releases/${{ github.event.release.id }}
-          curl -s -X DELETE \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.event.repository.full_name }}/git/refs/tags/${{ github.event.release.tag_name }}
