@@ -11,7 +11,7 @@ jobs:
       - name: download-source
         run: curl -sL "${{ github.event.release.tarball_url }}" >"$ARCHIVE_NAME".tar.gz
       - name: unzip-source
-        run: mkdir "$ARCHIVE_NAME" && tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
+        run: mkdir "$ARCHIVE_NAME" && tar -xf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: clean-source
         run: rm -rf "$ARCHIVE_NAME"/.github
       - name: create-archive
