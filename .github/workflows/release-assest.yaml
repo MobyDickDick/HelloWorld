@@ -9,7 +9,11 @@ jobs:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
       - name: download-source
-        run: curl -s -X GET "${{ github.event.release.tarball_url }}" > "$ARCHIVE_NAME".tar.gz
+        run: curl \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"         
+            -H "Accept: application/vnd.github.v3+json" \
+            "${{ github.event.release.tarball_url }}" \
+            > "$ARCHIVE_NAME".tar.gz
       - name: unzip-source
         run: mkdir "$ARCHIVE_NAME" && tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: clean-source
