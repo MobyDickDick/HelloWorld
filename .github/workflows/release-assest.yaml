@@ -9,7 +9,7 @@ jobs:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
       - name: download-source
-        run: curl -sL "${{ github.event.release.tarball_url }}" 
+        run: curl -sL "https://api.github.com/repos/MobyDickDick/HelloWorld/tarball/v0.0.0.45" >"$ARCHIVE_NAME".tar.gz
       - name: unzip-source
         run: mkdir "$ARCHIVE_NAME" && tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: clean-source
