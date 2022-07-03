@@ -9,6 +9,7 @@ jobs:
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
       TARBALL_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.tar.gz
+      GITHUB_TOKEN:
     steps:
       - name: get-name
         run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_TOKEN
