@@ -9,9 +9,9 @@ jobs:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
       - name: download-source
-        run: curl -sL "${{ github.event.release.tarball_url }}" >"$ARCHIVE_NAME".tar.gz
+        run: curl -sL --compressed "${{ github.event.release.tarball_url }}" >"$ARCHIVE_NAME".tar.gz
       - name: get-archive-format
-        run:  echo "$ARCHIVE_NAME".tar.gz
+        run:  file "$ARCHIVE_NAME".tar.gz
       - name: unzip-source
         run: mkdir "$ARCHIVE_NAME" && tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: clean-source
