@@ -1,3 +1,4 @@
+# Learn action/checkout@v2
 name: "functional-test"
 on:
   push:
