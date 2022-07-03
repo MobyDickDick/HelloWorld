@@ -10,8 +10,8 @@ jobs:
     steps:
       - name: download-source
         run: curl \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \         
             -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \         
             "${{ github.event.release.tarball_url }}" \
             > "$ARCHIVE_NAME".tar.gz
       - name: unzip-source
