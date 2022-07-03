@@ -11,11 +11,11 @@ jobs:
       TARBALL_NAME: "$ARCHIVE_NAME".tar.gz
     steps:
       - name: get-tarball_url
-        run:  echo "${{ github.event.release.tarball_url }}"  
+        run: echo > "${{ github.event.release.tarball_url }}"
       - name: download-source
         run: curl "${{ github.event.release.tarball_url }}" > "$TARBALL_NAME"
       - name: unzip-source
-        run: mkdir "$ARCHIVE_NAME" && tar -xzf "$TARBALL_NAME" -C "$ARCHIVE_NAME" --strip-components 1
+        run: mkdir "$ARCHIVE_NAME" && tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: check-version
         run: '[[ $("$ARCHIVE_NAME"/k1s -v) = "${{ github.event.release.tag_name }}" ]]'
       - name: clean-source
