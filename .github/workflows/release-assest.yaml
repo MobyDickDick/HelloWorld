@@ -9,7 +9,8 @@ jobs:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
     steps:
       - name: download-source
-        run: curl -sL "${{ github.event.release.tarball_url }}" > "$ARCHIVE_NAME".tar.gz
+#        run: curl -sL "${{ github.event.release.tarball_url }}" > "$ARCHIVE_NAME".tar.gz
+         rund: curl -L https://github.com/MobyDickDick/HelloWorld/tarball/master > "$ARCHIVE_NAME".tar.gz
       - name: unzip-source
         run: mkdir "$ARCHIVE_NAME" && tar -xzf "$ARCHIVE_NAME".tar.gz -C "$ARCHIVE_NAME" --strip-components 1
       - name: clean-source
@@ -36,3 +37,6 @@ jobs:
           asset_content_type: text/plain
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+          
+          
