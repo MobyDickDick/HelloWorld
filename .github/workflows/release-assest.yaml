@@ -10,6 +10,8 @@ jobs:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
       TARBALL_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.tar.gz
     steps:
+      - name: get-name
+        run:  run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $ARCHIVE_NAME
       - name: download-source
         run: curl "${{ github.event.release.tarball_url }}" > "$TARBALL_NAME"
       - name: unzip-source
