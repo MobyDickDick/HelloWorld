@@ -8,8 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
-    env:
-      TARBALL_NAME: "$ARCHIVE_NAME".tar.gz
+      TARBALL_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.tar.gz
     steps:
       - name: download-source
         run: curl "${{ github.event.release.tarball_url }}" > "$TARBALL_NAME"
