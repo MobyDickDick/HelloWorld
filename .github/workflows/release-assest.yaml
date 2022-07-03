@@ -11,9 +11,9 @@ jobs:
       TARBALL_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.tar.gz
     steps:
       - name: get-name
-        run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $ARCHIVE_NAME
+        run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_TOKEN
       - name: download-source
-        run: curl "${{ github.event.release.tarball_url }}" > "$TARBALL_NAME"
+        run: curl "$GITHUB_TOKEN" > "$TARBALL_NAME"
       - name: unzip-source
         run: mkdir "$ARCHIVE_NAME" && tar -xzf "$TARBALL_NAME" -C "$ARCHIVE_NAME" --strip-components 1
       - name: check-version
