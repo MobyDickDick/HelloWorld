@@ -14,6 +14,8 @@ jobs:
         run: echo "${{ github.event.release.tarball_url }}"
       - name: download-source
         run: curl "${{ github.event.release.tarball_url }}" > "$TARBALL_NAME"
+      - name: echo-response
+        run: echo "$TARBALL_NAME"
       - name: unzip-source
         run: mkdir "$ARCHIVE_NAME" && tar -xzf "$TARBALL_NAME" -C "$ARCHIVE_NAME" --strip-components 1
       - name: check-version
